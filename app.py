@@ -6,7 +6,7 @@ app = Dash(__name__)
 # Layout of the app
 app.layout = html.Div(
     [
-        html.H1("Dash Callback Example"),
+        html.H1("Let's test the continuous deployment"),
         html.Div(id="output-div", children="Button not clicked yet."),
         html.Button("Click Me", id="example-button", n_clicks=0),
     ]
