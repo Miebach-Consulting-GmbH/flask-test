@@ -1,4 +1,5 @@
 from dash import Dash, html, dcc, Input, Output
+import os
 
 # Initialize the Dash app
 app = Dash(__name__)
@@ -13,10 +14,30 @@ app.layout = html.Div(
 )
 
 
+def get_counter():
+    """Read and return the persisted counter value."""
+    if os.path.exists("counter.txt"):
+        with open("counter.txt", "r") as fh:
+            try:
+                return int(fh.read().strip())
+            except ValueError:
+                return 0
+    return 0
+
+
+def set_counter(n: int) -> None:
+    """Persist the counter value to disk."""
+    with open("counter.txt", "w") as fh:
+        fh.write(str(n))
+
+
 # Callback to update the text on button click
 @app.callback(Output("output-div", "children"), Input("example-button", "n_clicks"))
 def update_output(n_clicks):
-    return f"Button clicked {n_clicks} times."
+    previous = get_counter()
+    total = previous + (n_clicks or 0)
+    set_counter(total)
+    return f"Button clicked {total} times. (previous counter: {previous})"
 
 
 # Run the app
